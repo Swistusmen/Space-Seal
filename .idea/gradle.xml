@@ -10,11 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/android-tutorial-1" />
-            <option value="$PROJECT_DIR$/android-tutorial-2" />
-            <option value="$PROJECT_DIR$/android-tutorial-3" />
-            <option value="$PROJECT_DIR$/android-tutorial-4" />
-            <option value="$PROJECT_DIR$/android-tutorial-5" />
+            <option value="$PROJECT_DIR$/SpaceSeal" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,1 +1,0 @@
-/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-2/build/intermediates/ndkBuild/debug/obj/local/x86
