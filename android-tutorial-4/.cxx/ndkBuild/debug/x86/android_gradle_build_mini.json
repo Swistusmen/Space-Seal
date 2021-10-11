@@ -1,0 +1,90 @@
+{
+  "buildFiles": [
+    "/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Android.mk",
+    "/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Application.mk"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/michal/Android/Sdk/ndk/21.4.7075529/ndk-build",
+      "NDK_PROJECT_PATH\u003dnull",
+      "APP_BUILD_SCRIPT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Android.mk",
+      "NDK_APPLICATION_MK\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Application.mk",
+      "APP_ABI\u003dx86",
+      "NDK_ALL_ABIS\u003dx86",
+      "NDK_DEBUG\u003d1",
+      "APP_PLATFORM\u003dandroid-21",
+      "NDK_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj",
+      "NDK_LIBS_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/lib",
+      "NDK_APPLICATION_MK\u003djni/Application.mk",
+      "GSTREAMER_JAVA_SRC_DIR\u003dsrc",
+      "GSTREAMER_ROOT_ANDROID\u003d/home/michal/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2",
+      "GSTREAMER_ASSETS_DIR\u003dsrc/assets",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/michal/Android/Sdk/ndk/21.4.7075529/ndk-build",
+    "NDK_PROJECT_PATH\u003dnull",
+    "APP_BUILD_SCRIPT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Android.mk",
+    "NDK_APPLICATION_MK\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Application.mk",
+    "APP_ABI\u003dx86",
+    "NDK_ALL_ABIS\u003dx86",
+    "NDK_DEBUG\u003d1",
+    "APP_PLATFORM\u003dandroid-21",
+    "NDK_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj",
+    "NDK_LIBS_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/lib",
+    "NDK_APPLICATION_MK\u003djni/Application.mk",
+    "GSTREAMER_JAVA_SRC_DIR\u003dsrc",
+    "GSTREAMER_ROOT_ANDROID\u003d/home/michal/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2",
+    "GSTREAMER_ASSETS_DIR\u003dsrc/assets",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "tutorial-4-debug-x86": {
+      "artifactName": "tutorial-4",
+      "buildCommandComponents": [
+        "/home/michal/Android/Sdk/ndk/21.4.7075529/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-21",
+        "NDK_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj",
+        "NDK_LIBS_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/lib",
+        "NDK_APPLICATION_MK\u003djni/Application.mk",
+        "GSTREAMER_JAVA_SRC_DIR\u003dsrc",
+        "GSTREAMER_ROOT_ANDROID\u003d/home/michal/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2",
+        "GSTREAMER_ASSETS_DIR\u003dsrc/assets",
+        "/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj/local/x86/libtutorial-4.so"
+      ],
+      "abi": "x86",
+      "output": "/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj/local/x86/libtutorial-4.so",
+      "runtimeFiles": []
+    },
+    "gstreamer_android-debug-gst-build-x86": {
+      "artifactName": "gstreamer_android",
+      "buildCommandComponents": [
+        "/home/michal/Android/Sdk/ndk/21.4.7075529/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-21",
+        "NDK_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/obj",
+        "NDK_LIBS_OUT\u003d/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-4/build/intermediates/ndkBuild/debug/lib",
+        "NDK_APPLICATION_MK\u003djni/Application.mk",
+        "GSTREAMER_JAVA_SRC_DIR\u003dsrc",
+        "GSTREAMER_ROOT_ANDROID\u003d/home/michal/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2",
+        "GSTREAMER_ASSETS_DIR\u003dsrc/assets",
+        "gst-build-x86/libgstreamer_android.so"
+      ],
+      "abi": "gst-build-x86",
+      "output": "gst-build-x86/libgstreamer_android.so",
+      "runtimeFiles": []
+    }
+  }
+}

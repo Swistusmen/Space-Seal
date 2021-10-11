@@ -1,0 +1,2 @@
+/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-3/jni/Android.mk
+/home/michal/Documents/Programming/Cloned/gst-docs/examples/tutorials/android/android-tutorial-3/jni/Application.mk
