@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="127.0.0.1"
             android:layout_margin="5dp"
-            android:id="@+id/adrdressIP"/>
+            android:id="@+id/addressIP"/>
         </LinearLayout>
         <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="8554"
-                    android:id="@+id/Port"/>
+                    android:id="@+id/PortText"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,14 +71,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="/test"
-                    android:id="@+id/adrdressPath"/>
+                    android:id="@+id/adrdressPathText"/>
             </LinearLayout>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="Save"
-                android:id="@+id/Save"/>
+                android:id="@+id/SaveSettingsButton"/>
     </LinearLayout>
 </LinearLayout>
 </RelativeLayout>

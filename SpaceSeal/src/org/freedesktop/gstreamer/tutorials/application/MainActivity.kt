@@ -25,8 +25,8 @@ class MainActivity : Activity() {
         }
 
         streamButton.setOnClickListener{
-            val streamActivity=Intent(this, Streamming::class.java)
-            startActivity(streamActivity)
+            val streammingActivity=Intent(this, Streamming::class.java)
+            startActivity(streammingActivity)
         }
 
 
