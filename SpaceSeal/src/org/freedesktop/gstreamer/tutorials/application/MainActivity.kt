@@ -3,9 +3,7 @@ package org.freedesktop.gstreamer.tutorials.application
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
 
 
 class MainActivity : Activity() {
@@ -22,6 +20,7 @@ class MainActivity : Activity() {
 
         settingsButton.setOnClickListener{
             val settingsActivity=Intent(this, Settings::class.java)
+            println(settingsActivity.action.toString())
             startActivity(settingsActivity)
         }
 
@@ -30,9 +29,7 @@ class MainActivity : Activity() {
             startActivity(streamActivity)
         }
 
-        aboutButton.setOnClickListener{
 
-        }
         /*
         try {
             GStreamer.init(this)
@@ -43,8 +40,8 @@ class MainActivity : Activity() {
         }
         */
 
-        setContentView(R.layout.main)
-        val tv = findViewById<View>(R.id.textview_info) as TextView
+        //setContentView(R.layout.main)
+        //val tv = findViewById<View>(R.id.textview_info) as TextView
         /*
         tv.text = "Welcome to " + nativeGetGStreamerInfo() + " !"
         */
