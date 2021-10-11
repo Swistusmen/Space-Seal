@@ -1,20 +1,39 @@
-package org.freedesktop.gstreamer.tutorials.tutorial_1
+package org.freedesktop.gstreamer.tutorials.application
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import org.freedesktop.gstreamer.tutorials.tutorial_1.R
+import android.widget.Button
 import android.widget.TextView
-import org.freedesktop.gstreamer.GStreamer
-import java.lang.Exception
 
-class Tutorial1 : Activity() {
+
+class MainActivity : Activity() {
     private external fun nativeGetGStreamerInfo(): String
 
     // Called when the activity is first created.
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.main)
+
+        val settingsButton=findViewById<Button>(R.id.SettingsButton)
+        val streamButton=findViewById<Button>(R.id.StreamButton)
+        val aboutButton=findViewById<Button>(R.id.AboutButton)
+
+        settingsButton.setOnClickListener{
+            val settingsActivity=Intent(this, Settings::class.java)
+            startActivity(settingsActivity)
+        }
+
+        streamButton.setOnClickListener{
+            val streamActivity=Intent(this, Streamming::class.java)
+            startActivity(streamActivity)
+        }
+
+        aboutButton.setOnClickListener{
+
+        }
+        /*
         try {
             GStreamer.init(this)
         } catch (e: Exception) {
@@ -22,9 +41,14 @@ class Tutorial1 : Activity() {
             finish()
             return
         }
+        */
+
         setContentView(R.layout.main)
         val tv = findViewById<View>(R.id.textview_info) as TextView
+        /*
         tv.text = "Welcome to " + nativeGetGStreamerInfo() + " !"
+        */
+
     }
 
     companion object {

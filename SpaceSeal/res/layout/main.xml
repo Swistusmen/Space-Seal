@@ -7,8 +7,42 @@
     <TextView
         android:id="@+id/textview_info"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:id="@+id/buttons"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stream"
+            android:background="@color/design_default_color_primary_dark"
+            android:id="@+id/StreamButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:background="@color/design_default_color_primary_dark"
+            android:id="@+id/SettingsButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:background="@color/design_default_color_primary_dark"
+            android:id="@+id/AboutButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"/>
+    </LinearLayout>
 
 </LinearLayout>
