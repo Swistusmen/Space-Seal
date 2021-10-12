@@ -11,6 +11,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final Integer DbVersion=1;
 
     private static final String SettingsTable="SettingsTable";
+    private static final String NullColumn="Id";
     private static final String FirstColumn="Ip";
     private static final String SecondColumn="Port";
     private static final String ThirdColumn="Path";
@@ -23,10 +24,11 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL("Drop table if exists "+SettingsTable+";");
-        String query="CREATE TABLE "+ SettingsTable+ "( "+ FirstColumn+ " STRING NOT NULL PRIMARY KEY, "+ SecondColumn+
+        String query="CREATE TABLE "+ SettingsTable+ "( "+NullColumn+" INTEGER PRIMARY KEY,"+ FirstColumn+ " STRING NOT NULL, "+ SecondColumn+
                 " TEXT NOT NULL, "+ ThirdColumn+" TEXT NOT NULL) ";
         db.execSQL(query);
         ContentValues values=new ContentValues();
+        values.put(NullColumn,0);
         values.put(FirstColumn,"127.0.0.1");
         values.put(SecondColumn,"8554");
         values.put(ThirdColumn,"/test");
@@ -44,7 +46,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
         String desc= "";
         if(cursor.moveToFirst()){
-            desc=cursor.getString(0);
+            desc=cursor.getString(1);
         }
         cursor.close();
         db.close();
@@ -56,7 +58,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
         String desc="";
         if(cursor.moveToFirst()){
-            desc=cursor.getString(2);
+            desc=cursor.getString(3);
         }
         cursor.close();
 
@@ -68,7 +70,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
         String desc="";
         if(cursor.moveToFirst()){
-            desc=cursor.getString(1);
+            desc=cursor.getString(2);
         }
         cursor.close();
         //db.close();
@@ -80,13 +82,20 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void updateSettings(String IpAddress, String Port, String AddressPath){
-        SQLiteDatabase db= getWritableDatabase();
-        ContentValues values=new ContentValues();
-        values.put(FirstColumn,IpAddress);
-        values.put(SecondColumn,Port);
-        values.put(ThirdColumn,AddressPath);
-        db.insert(SettingsTable,null,values);
-        db.close();
+        SQLiteDatabase write=this.getWritableDatabase();
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ " where( Id=0 );",null);
+        if(cursor.moveToFirst()){
+            do{
+                ContentValues values=new ContentValues();
+                values.put(FirstColumn,IpAddress);
+                values.put(SecondColumn,Port);
+                values.put(ThirdColumn,AddressPath);
+                write.update(SettingsTable,values,"Id=?",new String[]{"0"});
+            }while(cursor.moveToNext());
+        }
+        write.close();
+        cursor.close();
     }
 
 }
