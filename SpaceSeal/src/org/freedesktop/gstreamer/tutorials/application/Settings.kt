@@ -19,9 +19,9 @@ class Settings : AppCompatActivity() {
         val pathText=findViewById<EditText>(R.id.adrdressPathText)
 
 
-        //pathText.setText(path)
-        //portText.setText(dbHandler.port)
-        //IpAddressText.setText(dbHandler.ipAddress)
+        pathText.setText(dbHandler.ipAddressPath)
+        portText.setText(dbHandler.port)
+        IpAddressText.setText(dbHandler.ipAddress)
 
         saveSettingsButton.setOnClickListener{
             dbHandler.updateSettings(IpAddressText.text.toString(),portText.text.toString(),pathText.text.toString())

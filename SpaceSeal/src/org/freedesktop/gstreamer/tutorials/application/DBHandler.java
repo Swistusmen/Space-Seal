@@ -22,17 +22,16 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        db.execSQL("Drop table if exists "+SettingsTable+";");
         String query="CREATE TABLE "+ SettingsTable+ "( "+ FirstColumn+ " STRING NOT NULL PRIMARY KEY, "+ SecondColumn+
                 " TEXT NOT NULL, "+ ThirdColumn+" TEXT NOT NULL) ";
         db.execSQL(query);
-
-        db= getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(FirstColumn,"127.0.0.1");
         values.put(SecondColumn,"8554");
         values.put(ThirdColumn,"/test");
         db.insert(SettingsTable,null,values);
-        db.close();
+        //should be db.close, but it carshes an app
     }
 
     @Override
@@ -41,38 +40,38 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public String getIpAddress(){
-        SQLiteDatabase db=this.getReadableDatabase();
+        SQLiteDatabase db=getReadableDatabase();
         Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
-        String desc= cursor.getString(0);
-        /*if(cursor.moveToFirst()){
+        String desc= "";
+        if(cursor.moveToFirst()){
             desc=cursor.getString(0);
-        }*/
+        }
         cursor.close();
         db.close();
         return desc;
     }
 
     public String getIpAddressPath(){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("Select Path from "+SettingsTable+ ";",null);
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
         String desc="";
         if(cursor.moveToFirst()){
             desc=cursor.getString(2);
         }
         cursor.close();
-        db.close();
+
         return desc;
     }
 
     public String getPort(){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("Select Port from "+SettingsTable+ ";",null);
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery("Select * from "+SettingsTable+ ";",null);
         String desc="";
         if(cursor.moveToFirst()){
             desc=cursor.getString(1);
         }
         cursor.close();
-        db.close();
+        //db.close();
         return desc;
     }
 
