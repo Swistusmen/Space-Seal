@@ -23,7 +23,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        db.execSQL("Drop table if exists "+SettingsTable+";");
         String query="CREATE TABLE "+ SettingsTable+ "( "+NullColumn+" INTEGER PRIMARY KEY,"+ FirstColumn+ " STRING NOT NULL, "+ SecondColumn+
                 " TEXT NOT NULL, "+ ThirdColumn+" TEXT NOT NULL) ";
         db.execSQL(query);
