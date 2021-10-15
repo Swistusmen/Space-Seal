@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Camera
+import android.hardware.Camera.CameraInfo
 import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.net.Uri
@@ -15,6 +16,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Surface
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
@@ -24,16 +26,20 @@ import java.io.IOException
 import java.nio.file.Files.exists
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.WindowManager
+
+
+
 
 
 //in the future this should be migrated into camera2
 
 //TODO
 /*
-0. Refactorthe code
-1.Make camera scan video at the portrait layout
-2.Button update- set color, etc
-3.Add new button- it will scan and send a video using gstreamer
+0. Refactor the code
+1.Make camera scan video at the portrait layout https://stackoverflow.com/questions/21095742/how-can-i-resolve-rotating-90-degree-of-video-when-playing-on-android
+2.Button update- set color, etc DONE
+3.Add new button- it will scan and send a video using gstreamer DONE
 4. Make an RTSP Scan
 5. Improve concents
 */
@@ -70,6 +76,7 @@ class Streamming() : AppCompatActivity() {
         var streamButton=findViewById<Button>(R.id.StartStreammingButton)
 
         mCamera = getCameraInstance()
+        mCamera?.setDisplayOrientation(90)
         mPreview = mCamera?.let {
             CameraPreviewer(this, it)
         }
@@ -157,13 +164,51 @@ class Streamming() : AppCompatActivity() {
             return true
         return false }
 
+    fun getDeviceOrientation(context: Context): Int {
+        var degrees = 0
+        val windowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
+        val rotation = windowManager.defaultDisplay.rotation
+        when (rotation) {
+            Surface.ROTATION_0 -> degrees = 0
+            Surface.ROTATION_90 -> degrees = 90
+            Surface.ROTATION_180 -> degrees = 180
+            Surface.ROTATION_270 -> degrees = 270
+        }
+        return degrees
+    }
+
+    fun getPreviewOrientation(context: Context?, cameraId: Int): Int {
+        var temp = 0
+        var previewOrientation = 0
+        val cameraInfo = CameraInfo()
+        Camera.getCameraInfo(cameraId, cameraInfo)
+        val deviceOrientation = getDeviceOrientation(context!!)
+        temp = cameraInfo.orientation - deviceOrientation + 360
+        previewOrientation = temp % 360
+        return previewOrientation
+    }
+
+    private fun getCamaraBackId():Int{
+
+        val numberOfCameras = Camera.getNumberOfCameras();
+        val cameraInfo = CameraInfo();
+        for (i in 0..numberOfCameras) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                return i;
+            }
+        }
+        return -1 // Device do not have back camera !!!!???
+    }
+
     private fun prepareVideoRecorder(): Boolean {
         mediaRecorder = MediaRecorder()
+        val rotation = getPreviewOrientation(this, getCamaraBackId())
+        Log.d(TAG, "Rotation ${rotation}")
 
         mCamera?.let { camera ->
             // Step 1: Unlock and set camera to MediaRecorder
             camera?.unlock()
-
             mediaRecorder?.run {
                 setCamera(camera)
 
@@ -179,6 +224,8 @@ class Streamming() : AppCompatActivity() {
                 setOutputFile(getFileToSaveVideo())
 
                 // Step 5: Set the preview output
+                setOrientationHint(rotation)
+
                 setPreviewDisplay(mPreview?.holder?.surface)
 
                 // Step 6: Prepare configured MediaRecorder
