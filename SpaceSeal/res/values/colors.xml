@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="redStop">#FF616D</color>
+    <color name="normalBackground">#FFF5EB</color>
+    <color name="greenAccept">#66DE93</color>
+    <color name="topBarBackground">#F4C7AB</color>
+    <color name="mainButton">#FFC074</color>
+    <color name="mainBackground">#DEEDF0</color>
+</resources>

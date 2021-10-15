@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/mainBackground">
 
     <TextView
         android:id="@+id/textview_info"
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Stream"
-            android:background="@color/design_default_color_primary_dark"
+            android:background="@color/greenAccept"
             android:id="@+id/StreamButton"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -27,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Settings"
-            android:background="@color/design_default_color_primary_dark"
+            android:background="@color/greenAccept"
             android:id="@+id/SettingsButton"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -37,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="About"
-            android:background="@color/design_default_color_primary_dark"
+            android:background="@color/greenAccept"
             android:id="@+id/AboutButton"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"

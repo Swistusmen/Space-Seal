@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.hardware.Camera
 import android.media.CamcorderProfile
 import android.media.MediaRecorder
@@ -27,11 +28,23 @@ import java.util.*
 
 //in the future this should be migrated into camera2
 
+//TODO
+/*
+0. Refactorthe code
+1.Make camera scan video at the portrait layout
+2.Button update- set color, etc
+3.Add new button- it will scan and send a video using gstreamer
+4. Make an RTSP Scan
+5. Improve concents
+*/
+
+
 class Streamming() : AppCompatActivity() {
     private var mCamera: Camera? = null
     private var mPreview: CameraPreviewer? = null
     private var mediaRecorder: MediaRecorder?= null
     private var isRecording=false
+    private var isReadyToStream=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,20 +66,19 @@ class Streamming() : AppCompatActivity() {
             == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1 );
 
-        var button=findViewById<Button>(R.id.RecordButton)
-
+        var recordButton=findViewById<Button>(R.id.RecordButton)
+        var streamButton=findViewById<Button>(R.id.StartStreammingButton)
 
         mCamera = getCameraInstance()
         mPreview = mCamera?.let {
             CameraPreviewer(this, it)
         }
-
         mPreview?.also {
             val preview: FrameLayout = findViewById(R.id.camera_preview)
             preview.addView(it)
         }
 
-        button.setOnClickListener{
+        recordButton.setOnClickListener{
             if (isRecording) {
                 // stop recording and release camera
                 mediaRecorder?.stop() // stop the recording
@@ -74,7 +86,10 @@ class Streamming() : AppCompatActivity() {
                 mCamera?.lock() // take camera access back from MediaRecorder
 
                 // inform the user that recording has stopped
-                button.setText("Recording")
+                recordButton.setText("Record")
+                recordButton.setBackgroundColor(Color.parseColor("#66DE93"))
+                streamButton.setBackgroundColor(Color.parseColor("#66DE93"))
+                isReadyToStream=true
                 isRecording = false
             } else {
                 // initialize video camera
@@ -83,7 +98,8 @@ class Streamming() : AppCompatActivity() {
                     // now you can start recording
                     mediaRecorder?.start()
                     // inform the user that recording has started
-                    button.setText("Stop")
+                    recordButton.setText("Stop recording")
+                    recordButton.setBackgroundColor(Color.parseColor("#FF616D"))
                     isRecording = true
                 } else {
                     // prepare didn't work, release the camera
@@ -92,6 +108,40 @@ class Streamming() : AppCompatActivity() {
                 }
             }
         }
+
+        streamButton.setOnClickListener{
+            if(isReadyToStream){
+                //TODO implement some actions here
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        releaseMediaRecorder() // if you are using MediaRecorder, release it first
+        releaseCamera() // release the camera immediately on pause event
+    }
+
+    private fun releaseMediaRecorder() {
+        mediaRecorder?.reset() // clear recorder configuration
+        mediaRecorder?.release() // release the recorder object
+        mediaRecorder = null
+        mCamera?.lock() // lock camera for later use
+    }
+
+    private fun releaseCamera() {
+        mCamera?.release() // release the camera for other applications
+        mCamera = null
+    }
+
+    private fun getFileToSaveVideo(): String{
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        var path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath.toString()+"/"
+        var dir: File=File(path)
+        if(!dir.exists())
+            dir.mkdirs()
+        var fileToSave=path+timeStamp+".mp4"
+        return fileToSave
     }
 
     fun getCameraInstance(): Camera? {
@@ -126,17 +176,8 @@ class Streamming() : AppCompatActivity() {
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 setVideoEncoder(MediaRecorder.VideoEncoder.H264)
 
-                val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                setOutputFile(getFileToSaveVideo())
 
-                var path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath.toString()+"/"
-
-                var dir: File=File(path)
-                if(!dir.exists())
-                    dir.mkdirs()
-                var fileToSave=path+timeStamp+".mp4"
-
-                setOutputFile(fileToSave)
-                
                 // Step 5: Set the preview output
                 setPreviewDisplay(mPreview?.holder?.surface)
 
@@ -157,23 +198,5 @@ class Streamming() : AppCompatActivity() {
 
         }
         return false
-    }
-
-    override fun onPause() {
-        super.onPause()
-        releaseMediaRecorder() // if you are using MediaRecorder, release it first
-        releaseCamera() // release the camera immediately on pause event
-    }
-
-    private fun releaseMediaRecorder() {
-        mediaRecorder?.reset() // clear recorder configuration
-        mediaRecorder?.release() // release the recorder object
-        mediaRecorder = null
-        mCamera?.lock() // lock camera for later use
-    }
-
-    private fun releaseCamera() {
-        mCamera?.release() // release the camera for other applications
-        mCamera = null
     }
 }
