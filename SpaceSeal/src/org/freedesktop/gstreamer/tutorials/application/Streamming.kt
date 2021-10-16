@@ -37,11 +37,14 @@ import android.view.WindowManager
 //TODO
 /*
 0. Refactor the code
-1.Make camera scan video at the portrait layout https://stackoverflow.com/questions/21095742/how-can-i-resolve-rotating-90-degree-of-video-when-playing-on-android
+1.Make camera scan video at the portrait layout DONE
 2.Button update- set color, etc DONE
 3.Add new button- it will scan and send a video using gstreamer DONE
-4. Make an RTSP Scan
-5. Improve concents
+4.Make an RTSP Server work -3
+5.Improve concents
+6.Improve video quality
+7.Add storing lasttly recordered vieo within DB -1
+8.Investigate how to stream already recordered video to the server -2
 */
 
 
@@ -51,6 +54,8 @@ class Streamming() : AppCompatActivity() {
     private var mediaRecorder: MediaRecorder?= null
     private var isRecording=false
     private var isReadyToStream=false
+    private var saveLocation: String=""
+    private var dbHandler: DBHandler= DBHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +96,7 @@ class Streamming() : AppCompatActivity() {
                 mediaRecorder?.stop() // stop the recording
                 releaseMediaRecorder() // release the MediaRecorder object
                 mCamera?.lock() // take camera access back from MediaRecorder
-
+                dbHandler.updateVideo(saveLocation)
                 // inform the user that recording has stopped
                 recordButton.setText("Record")
                 recordButton.setBackgroundColor(Color.parseColor("#66DE93"))
@@ -221,7 +226,8 @@ class Streamming() : AppCompatActivity() {
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 setVideoEncoder(MediaRecorder.VideoEncoder.H264)
 
-                setOutputFile(getFileToSaveVideo())
+                saveLocation=getFileToSaveVideo()
+                setOutputFile(saveLocation)
 
                 // Step 5: Set the preview output
                 setOrientationHint(rotation)

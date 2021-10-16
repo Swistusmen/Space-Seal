@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 
 class Settings : AppCompatActivity() {
     var dbHandler: DBHandler= DBHandler(this)
@@ -17,7 +18,6 @@ class Settings : AppCompatActivity() {
         val IpAddressText= findViewById<EditText>(R.id.addressIP)
         val portText=findViewById<EditText>(R.id.PortText)
         val pathText=findViewById<EditText>(R.id.adrdressPathText)
-
 
         pathText.setText(dbHandler.ipAddressPath)
         portText.setText(dbHandler.port)

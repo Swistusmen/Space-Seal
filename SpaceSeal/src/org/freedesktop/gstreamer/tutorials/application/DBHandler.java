@@ -8,14 +8,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DbName="InternalDataBase";
-    private static final Integer DbVersion=1;
+    private static final Integer DbVersion=2;
 
+    //storing info about protocol
     private static final String SettingsTable="SettingsTable";
     private static final String NullColumn="Id";
     private static final String FirstColumn="Ip";
     private static final String SecondColumn="Port";
     private static final String ThirdColumn="Path";
     //maybe in the future protocol
+
+    private static final String VideosTable="VideoTable";
+    private static final String IdColumn="Id";
+    private static final String videoLocation="Location";
 
     public DBHandler(Context context){
         super(context, DbName, null, DbVersion);
@@ -32,6 +37,19 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(SecondColumn,"8554");
         values.put(ThirdColumn,"/test");
         db.insert(SettingsTable,null,values);
+
+        //db.close();
+        //db=getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS '"+VideosTable+"'");
+        query="CREATE TABLE "+ VideosTable+ "( "+IdColumn+" INTEGER PRIMARY KEY,"+ videoLocation+ " STRING NOT NULL) ";
+        db.execSQL(query);
+        values=new ContentValues();
+        values.put(IdColumn,0);
+        values.put(videoLocation," ");
+
+        db.insert(VideosTable,null,values);
+
+
         //should be db.close, but it carshes an app
     }
 
@@ -96,5 +114,33 @@ public class DBHandler extends SQLiteOpenHelper {
         write.close();
         cursor.close();
     }
+
+    public void updateVideo(String path){
+        SQLiteDatabase write=this.getWritableDatabase();
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("Select * from "+VideosTable+ " where( Id=0 );",null);
+        if(cursor.moveToFirst()){
+            do{
+                ContentValues values=new ContentValues();
+                values.put(videoLocation,path);
+                write.update(VideosTable,values,"Id=?",new String[]{"0"});
+            }while(cursor.moveToNext());
+        }
+        write.close();
+        cursor.close();
+    }
+
+    public String getRecentlyRecordedVideoPath(){
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery("Select * from "+VideosTable+ " where( Id=0);",null);
+        String desc="";
+        if(cursor.moveToFirst()){
+            desc=cursor.getString(1);
+        }
+        cursor.close();
+        db.close();
+        return desc;
+    }
+
 
 }
