@@ -43,7 +43,7 @@ import android.view.WindowManager
 4.Make an RTSP Server work -3
 5.Improve concents
 6.Improve video quality
-7.Add storing lasttly recordered vieo within DB -1
+7.Add storing lasttly recordered vieo within DB DONE
 8.Investigate how to stream already recordered video to the server -2
 */
 

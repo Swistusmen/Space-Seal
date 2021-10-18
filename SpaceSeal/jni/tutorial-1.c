@@ -2,10 +2,28 @@
 #include <jni.h>
 #include <android/log.h>
 #include <gst/gst.h>
+#include <gst/rtsp-server/rtsp-server.h>
+
+//zalozenie- plik bedzie dostepny pod sciezka
+
+/*
+ * 1. Dodanie metody glownej- nadawanie streamu w rtsp -1
+ * 2. Dodanie wszystkiego dookola w kodzie C/cpp
+ * -init -2
+ * -tablica metod
+ * -funkcje pomocnicze -3
+ * -linkowanie //DONE
+ * 3. Dodanie metody play i pause- metod konczacych dzialanie funkcji
+ * 4. Integracja z kodem Javovym
+ */
 
 /*
  * Java Bindings
  */
+
+static void * main_function(void * userData){
+
+}
 
 //just a method which does some actions in cpp
 static jstring
@@ -36,7 +54,7 @@ JNI_OnLoad (JavaVM * vm, void *reserved)
   }
   //loading ui-> this is specific for the tutorial from gstreamer
   jclass klass = (*env)->FindClass (env,
-      "org/freedesktop/gstreamer/tutorials/application/MainActivity");
+      "org/freedesktop/gstreamer/tutorials/application/About");
   //registering methods within
   (*env)->RegisterNatives (env, klass, native_methods,
       G_N_ELEMENTS (native_methods));

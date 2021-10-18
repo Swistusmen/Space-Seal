@@ -7,7 +7,7 @@ import android.widget.Button
 
 
 class MainActivity : Activity() {
-    private external fun nativeGetGStreamerInfo(): String
+    //private external fun nativeGetGStreamerInfo(): String
 
     // Called when the activity is first created.
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +27,11 @@ class MainActivity : Activity() {
         streamButton.setOnClickListener{
             val streammingActivity=Intent(this, Streamming::class.java)
             startActivity(streammingActivity)
+        }
+
+        aboutButton.setOnClickListener{
+            val aboutActivity= Intent(this, About::class.java)
+            startActivity(aboutActivity)
         }
 
 
