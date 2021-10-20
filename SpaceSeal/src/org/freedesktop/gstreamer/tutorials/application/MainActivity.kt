@@ -17,6 +17,7 @@ class MainActivity : Activity() {
         val settingsButton=findViewById<Button>(R.id.SettingsButton)
         val streamButton=findViewById<Button>(R.id.StreamButton)
         val aboutButton=findViewById<Button>(R.id.AboutButton)
+        val requestButton=findViewById<Button>(R.id.HTTPButton)
 
         settingsButton.setOnClickListener{
             val settingsActivity=Intent(this, Settings::class.java)
@@ -32,6 +33,11 @@ class MainActivity : Activity() {
         aboutButton.setOnClickListener{
             val aboutActivity= Intent(this, About::class.java)
             startActivity(aboutActivity)
+        }
+
+        requestButton.setOnClickListener{
+            val httpActivity= Intent(this,Request::class.java)
+            startActivity(httpActivity)
         }
 
 

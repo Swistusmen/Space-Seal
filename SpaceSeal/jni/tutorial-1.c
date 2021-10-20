@@ -13,31 +13,6 @@
 # define SET_CUSTOM_DATA(env, thiz, fieldID, data) (*env)->SetLongField (env, thiz, fieldID, (jlong)(jint)data)
 #endif
 
-//zalozenie- plik bedzie dostepny pod sciezka
-//zakladam ze nie przechowuje tutaj nic, albo jak najmniej-nie dziala, rzuca bledem co chwila, nie ma jak debugowac
-/*
- * -problem z przechowywanie jstringow
- */
-/*
- * 1. Dodanie metody glownej- nadawanie streamu w rtsp -1
- * 2. Dodanie wszystkiego dookola w kodzie C/cpp
- * -init -2
- * -tablica metod DONE
- * -funkcje pomocnicze -3
- * -linkowanie //DONE
- * 3. Dodanie metody play i pause- metod konczacych dzialanie funkcji
- * 4. Integracja z kodem Javovym
- */
-
-/*
- * Java Bindings
- */
-
-/*
- * Robie serwer nadajacy wideo- najprostszy mozliwy, zero przechowywania w pamieci, dostaje watek i go odpala
- *
- */
-
 static jfieldID custom_data_field_id;
 static jfieldID streammingObject_id;
 static jfieldID IpPath;
