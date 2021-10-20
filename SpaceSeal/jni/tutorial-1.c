@@ -3,14 +3,26 @@
 #include <android/log.h>
 #include <gst/gst.h>
 #include <gst/rtsp-server/rtsp-server.h>
+#include <pthread.h>
+
+#if GLIB_SIZEOF_VOID_P == 8
+# define GET_CUSTOM_DATA(env, thiz, fieldID) (CustomData *)(*env)->GetLongField (env, thiz, fieldID)
+# define SET_CUSTOM_DATA(env, thiz, fieldID, data) (*env)->SetLongField (env, thiz, fieldID, (jlong)data)
+#else
+# define GET_CUSTOM_DATA(env, thiz, fieldID) (CustomData *)(jint)(*env)->GetLongField (env, thiz, fieldID)
+# define SET_CUSTOM_DATA(env, thiz, fieldID, data) (*env)->SetLongField (env, thiz, fieldID, (jlong)(jint)data)
+#endif
 
 //zalozenie- plik bedzie dostepny pod sciezka
-
+//zakladam ze nie przechowuje tutaj nic, albo jak najmniej-nie dziala, rzuca bledem co chwila, nie ma jak debugowac
+/*
+ * -problem z przechowywanie jstringow
+ */
 /*
  * 1. Dodanie metody glownej- nadawanie streamu w rtsp -1
  * 2. Dodanie wszystkiego dookola w kodzie C/cpp
  * -init -2
- * -tablica metod
+ * -tablica metod DONE
  * -funkcje pomocnicze -3
  * -linkowanie //DONE
  * 3. Dodanie metody play i pause- metod konczacych dzialanie funkcji
@@ -21,8 +33,95 @@
  * Java Bindings
  */
 
-static void * main_function(void * userData){
+/*
+ * Robie serwer nadajacy wideo- najprostszy mozliwy, zero przechowywania w pamieci, dostaje watek i go odpala
+ *
+ */
 
+static jfieldID custom_data_field_id;
+static jfieldID streammingObject_id;
+static jfieldID IpPath;
+static jfieldID test;
+static jmethodID java_method_that_can_be_called_from_here;
+static jstring testString;
+static jint testInt;
+static jobject app;
+static char *IP;
+static char *Port;
+static char *Path;
+static char* pipelineDesc;
+static GstRTSPServer *server;
+static GMainLoop *loop;
+static GstRTSPMountPoints *mounts;
+static GstRTSPMediaFactory *factory;
+static pthread_t app_thread;
+
+static void
+media_prepared_cb (GstRTSPMedia * media)
+{
+    guint i, n_streams;
+
+    n_streams = gst_rtsp_media_n_streams (media);
+
+    GST_INFO ("media %p is prepared and has %u streams", media, n_streams);
+
+    for (i = 0; i < n_streams; i++) {
+        GstRTSPStream *stream;
+        GObject *session;
+
+        stream = gst_rtsp_media_get_stream (media, i);
+        if (stream == NULL)
+            continue;
+
+        session = gst_rtsp_stream_get_rtpsession (stream);
+    }
+}
+
+static void
+media_configure_cb (GstRTSPMediaFactory * factory, GstRTSPMedia * media)
+{
+    g_signal_connect (media, "prepared", (GCallback) media_prepared_cb, factory);
+}
+
+static void * main_function(void * userData){
+    loop=g_main_loop_new(NULL,FALSE);
+    server=gst_rtsp_server_new();
+
+    gst_rtsp_server_set_address(server,IP);
+    gst_rtsp_server_set_service(server,Port);
+    mounts=gst_rtsp_server_get_mount_points(server);
+    factory=gst_rtsp_media_factory_new();
+
+    gst_rtsp_media_factory_set_launch (factory, pipelineDesc);
+    g_signal_connect(factory, "media-configure", (GCallback) media_configure_cb , factory);
+    gst_rtsp_mount_points_add_factory(mounts,IP,factory);
+    g_object_unref(mounts);
+    gst_rtsp_server_attach (server, NULL);
+
+    g_main_loop_run(loop);
+}
+
+static void * enable_embeeded_to_use_Java(JNIEnv* env, jclass klass){
+    custom_data_field_id= (*env)->GetFieldID(env,klass,"native_custom_data","J");//enalbes C to use a field of the class,named 3rd arg
+    streammingObject_id=(*env)->GetFieldID(env,klass,"nativeStreammingObject", "J");
+    IpPath= (jstring)(*env)->GetFieldID(env,klass,"path", "Ljava/lang/String;");
+    test= (*env)->GetFieldID(env,klass,"testInteger","Ljava/lang/Integer;");
+}
+
+static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescription, jstring ip, jstring port) //initalizes instance of class, to be able to call cfunctions
+{
+    app= (*env)->NewGlobalRef(env,thiz);
+
+    pipelineDesc=(*env)->GetStringUTFChars(env,pipelineDescription,0);
+    (*env)->ReleaseStringUTFChars(env,pipelineDescription,pipelineDesc);
+
+    IP=(*env)->GetStringUTFChars(env,ip,0);
+    (*env)->ReleaseStringUTFChars(env,ip,IP);
+
+    Port=(*env)->GetStringUTFChars(env,port,0);
+    (*env)->ReleaseStringUTFChars(env,port,Port);
+
+    pthread_create(&app_thread,NULL,&main_function,NULL);
 }
 
 //just a method which does some actions in cpp
@@ -32,13 +131,28 @@ gst_native_get_gstreamer_info (JNIEnv * env, jobject thiz)
   char *version_utf8 = gst_version_string ();
   jstring *version_jstring = (*env)->NewStringUTF (env, version_utf8);
   g_free (version_utf8);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",Path);
   return version_jstring;
+}
+
+static jstring gst_randomTextTest (JNIEnv* env, jobject thiz,jstring ip, jstring port,jstring path)
+{
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",IP);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",pipelineDesc);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",Port);
+    return ip;
 }
 
 //all c/cpp methos should be placed within this table
 static JNINativeMethod native_methods[] = {
-  {"nativeGetGStreamerInfo", "()Ljava/lang/String;",
-      (void *) gst_native_get_gstreamer_info}
+  {"nativeGetGStreamerInfo", "()Ljava/lang/String;",(void *) gst_native_get_gstreamer_info},
+  { "nativeInit", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",(void *) gst_native_init},
+  {"nativeEnableCRunJava", "()V",(void *) enable_embeeded_to_use_Java},
+  { "nativeRandom", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",(void *) gst_randomTextTest},
 };
 
 //runs everytime java loads library

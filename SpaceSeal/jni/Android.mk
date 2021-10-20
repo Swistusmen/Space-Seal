@@ -6,6 +6,7 @@ LOCAL_MODULE    := tutorial-1
 LOCAL_SRC_FILES := tutorial-1.c dummy.cpp
 LOCAL_SHARED_LIBRARIES := gstreamer_android
 LOCAL_LDLIBS := -llog
+
 include $(BUILD_SHARED_LIBRARY)
 
 ifndef GSTREAMER_ROOT_ANDROID
@@ -27,6 +28,9 @@ $(error Target arch ABI not supported: $(TARGET_ARCH_ABI))
 endif
 
 GSTREAMER_NDK_BUILD_PATH  := $(GSTREAMER_ROOT)/share/gst-android/ndk-build/
-GSTREAMER_PLUGINS         := coreelements
+GSTREAMER_PLUGINS         := $(GSTREAMER_PLUGINS_CORE) $(GSTREAMER_PLUGINS_SYS) $(GSTREAMER_PLUGINS_CODECS) $(GSTREAMER_PLUGINS_CODECS_RESTRICTED) $(GSTREAMER_PLUGINS_NET)
+GSTREAMER_EXTRA_DEPS      := gstreamer-video-1.0 gstreamer-rtsp-server-1.0
 GSTREAMER_EXTRA_LIBS      := -liconv
 include $(GSTREAMER_NDK_BUILD_PATH)/gstreamer-1.0.mk
+
+
