@@ -10,7 +10,7 @@ import org.freedesktop.gstreamer.GStreamer;
 
 public class About extends AppCompatActivity {
     private native String nativeGetGStreamerInfo();
-    private native void nativeInit(String pipelineDescription,String ip, String port);
+    private native void nativeInit(String pipelineDescription,String ip, String port,String path);
     private static native void nativeEnableCRunJava();
     private native String nativeRandom(String ip, String port,String path);
     private DBHandler dbHandler;
@@ -38,7 +38,7 @@ public class About extends AppCompatActivity {
             return;
         }
 
-        nativeInit(PipelineBuilder.buildPipeline(dbHandler.getRecentlyRecordedVideoPath()),ipAddress,port);
+        nativeInit(PipelineBuilder.buildPipeline(dbHandler.getRecentlyRecordedVideoPath()),ipAddress,port,path);
 
         TextView aboutText=(TextView) findViewById(R.id.AboutText);
         aboutText.setText("Welcome to " + nativeRandom(ipAddress,port,path)+" "+testInteger+" !");//nativeGetGStreamerInfo() + " !");

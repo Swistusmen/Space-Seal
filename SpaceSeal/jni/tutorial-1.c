@@ -59,21 +59,35 @@ media_configure_cb (GstRTSPMediaFactory * factory, GstRTSPMedia * media)
 }
 
 static void * main_function(void * userData){
-    loop=g_main_loop_new(NULL,FALSE);
-    server=gst_rtsp_server_new();
+    GMainContext * context;
+    context=g_main_context_new();
+    g_main_context_push_thread_default(context);
 
-    gst_rtsp_server_set_address(server,IP);
-    gst_rtsp_server_set_service(server,Port);
+    server=gst_rtsp_server_new();
+    //g_object_set (server, "service", '8554', NULL);
+    //gst_rtsp_server_set_address(server,IP);
+
+    //g_print("Nowo ustawiony adres %s", gst_rtsp_server_get_address(server));
+    //gst_rtsp_server_set_address(server,IP); //this causes troubles
+
+
     mounts=gst_rtsp_server_get_mount_points(server);
     factory=gst_rtsp_media_factory_new();
-
     gst_rtsp_media_factory_set_launch (factory, pipelineDesc);
     g_signal_connect(factory, "media-configure", (GCallback) media_configure_cb , factory);
-    gst_rtsp_mount_points_add_factory(mounts,IP,factory);
+
+    gst_rtsp_mount_points_add_factory(mounts,"/test",factory);
+
     g_object_unref(mounts);
-    gst_rtsp_server_attach (server, NULL);
+
+    if(gst_rtsp_server_attach (server, context)==0)
+        __android_log_print (ANDROID_LOG_ERROR, "tutorial-1","failed to attach server");
+
+    loop=g_main_loop_new(context,FALSE);
 
     g_main_loop_run(loop);
+    g_main_loop_unref(loop);
+
 }
 
 static void * enable_embeeded_to_use_Java(JNIEnv* env, jclass klass){
@@ -83,7 +97,7 @@ static void * enable_embeeded_to_use_Java(JNIEnv* env, jclass klass){
     test= (*env)->GetFieldID(env,klass,"testInteger","Ljava/lang/Integer;");
 }
 
-static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescription, jstring ip, jstring port) //initalizes instance of class, to be able to call cfunctions
+static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescription, jstring ip, jstring port,jstring path) //initalizes instance of class, to be able to call cfunctions
 {
     app= (*env)->NewGlobalRef(env,thiz);
 
@@ -95,6 +109,9 @@ static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescript
 
     Port=(*env)->GetStringUTFChars(env,port,0);
     (*env)->ReleaseStringUTFChars(env,port,Port);
+
+    Path=(*env)->GetStringUTFChars(env,path,0);
+    (*env)->ReleaseStringUTFChars(env,path,Path);
 
     pthread_create(&app_thread,NULL,&main_function,NULL);
 }
@@ -119,13 +136,14 @@ static jstring gst_randomTextTest (JNIEnv* env, jobject thiz,jstring ip, jstring
                          "%s",pipelineDesc);
     __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
                          "%s",Port);
+    g_print("Hello");
     return ip;
 }
 
 //all c/cpp methos should be placed within this table
 static JNINativeMethod native_methods[] = {
   {"nativeGetGStreamerInfo", "()Ljava/lang/String;",(void *) gst_native_get_gstreamer_info},
-  { "nativeInit", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",(void *) gst_native_init},
+  { "nativeInit", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",(void *) gst_native_init},
   {"nativeEnableCRunJava", "()V",(void *) enable_embeeded_to_use_Java},
   { "nativeRandom", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",(void *) gst_randomTextTest},
 };
