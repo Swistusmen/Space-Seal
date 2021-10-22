@@ -64,12 +64,12 @@ static void * main_function(void * userData){
     g_main_context_push_thread_default(context);
 
     server=gst_rtsp_server_new();
-    //g_object_set (server, "service", '8554', NULL);
-    //gst_rtsp_server_set_address(server,IP);
+
+    g_object_set (server, "service", "8554", NULL); //good not delete
+    //gst_rtsp_server_set_address(server,"192.168.0.10");
 
     //g_print("Nowo ustawiony adres %s", gst_rtsp_server_get_address(server));
     //gst_rtsp_server_set_address(server,IP); //this causes troubles
-
 
     mounts=gst_rtsp_server_get_mount_points(server);
     factory=gst_rtsp_media_factory_new();
