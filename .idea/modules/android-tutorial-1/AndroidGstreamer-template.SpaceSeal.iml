@@ -57,18 +57,18 @@
     <output url="file://$MODULE_DIR$/../../../SpaceSeal/build/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../SpaceSeal/build/intermediates/javac/debugUnitTest/classes" />
     <exclude-output />
-    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include">
-      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include" type="native-header-root" />
-      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include/glib-2.0" type="native-header-root" />
+    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include">
+      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include" type="native-header-root" />
+      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include/glib-2.0" type="native-header-root" />
     </content>
-    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include/gio-unix-2.0">
-      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include/gio-unix-2.0" type="native-header-root" />
+    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include/gio-unix-2.0">
+      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include/gio-unix-2.0" type="native-header-root" />
     </content>
-    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include/gstreamer-1.0">
-      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/include/gstreamer-1.0" type="native-header-root" />
+    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include/gstreamer-1.0">
+      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/include/gstreamer-1.0" type="native-header-root" />
     </content>
-    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/lib/glib-2.0/include">
-      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.2/x86/lib/glib-2.0/include" type="native-header-root" />
+    <content url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/lib/glib-2.0/include">
+      <sourceFolder url="file://$USER_HOME$/Android/GStreamer/gstreamer-1.0-android-universal-1.19.3/x86/lib/glib-2.0/include" type="native-header-root" />
     </content>
     <content url="file://$MODULE_DIR$/../../../SpaceSeal">
       <sourceFolder url="file://$MODULE_DIR$/../../../SpaceSeal/build/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />

@@ -3,6 +3,9 @@
 #include <android/log.h>
 #include <gst/gst.h>
 #include <gst/rtsp-server/rtsp-server.h>
+#include <gst/codecparsers/codecparsers-prelude.h>
+#include <gstreamer-1.0/gst/codecparsers/gstav1parser.h>
+#include <libavcodec/avcodec.h>
 #include <pthread.h>
 
 #if GLIB_SIZEOF_VOID_P == 8
@@ -30,6 +33,12 @@ static GMainLoop *loop;
 static GstRTSPMountPoints *mounts;
 static GstRTSPMediaFactory *factory;
 static pthread_t app_thread;
+static GError* error;
+static GstBus* bus;
+static GstElement* pipeline;
+
+//TODO: Install gstreamer with av1enc
+//TODO:
 
 static void
 media_prepared_cb (GstRTSPMedia * media)
@@ -66,10 +75,6 @@ static void * main_function(void * userData){
     server=gst_rtsp_server_new();
 
     g_object_set (server, "service", "8554", NULL); //good not delete
-    //gst_rtsp_server_set_address(server,"192.168.0.10");
-
-    //g_print("Nowo ustawiony adres %s", gst_rtsp_server_get_address(server));
-    //gst_rtsp_server_set_address(server,IP); //this causes troubles
 
     mounts=gst_rtsp_server_get_mount_points(server);
     factory=gst_rtsp_media_factory_new();
@@ -87,7 +92,26 @@ static void * main_function(void * userData){
 
     g_main_loop_run(loop);
     g_main_loop_unref(loop);
+}
 
+static void* stream_http(void* userData){
+
+    GMainContext * context;
+    context=g_main_context_new();
+    g_main_context_push_thread_default(context);
+
+    loop=g_main_loop_new(context,FALSE);
+
+    pipeline=gst_parse_launch_full (pipelineDesc, NULL, GST_PARSE_FLAG_FATAL_ERRORS, &error);
+    if (!pipeline || error) {
+        g_printerr ("Unable to build pipeline: %s", error->message ? error->message : "(no debug)");
+    }
+    gst_element_set_state(pipeline, GST_STATE_PLAYING);
+    /*bus=gst_element_get_bus(pipeline);
+    gst_bus_add_signal_watch(bus);
+    g_signal_connect( G_OBJECT(bus),"message::eos",(GCallback)onEOSCallback,pipeline);
+    gst_object_unref(bus);*/
+    g_main_loop_run(loop);
 }
 
 static void * enable_embeeded_to_use_Java(JNIEnv* env, jclass klass){
@@ -113,7 +137,16 @@ static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescript
     Path=(*env)->GetStringUTFChars(env,path,0);
     (*env)->ReleaseStringUTFChars(env,path,Path);
 
-    pthread_create(&app_thread,NULL,&main_function,NULL);
+    //pthread_create(&app_thread,NULL,&main_function,NULL);
+    char current_dir[FILENAME_MAX];
+    getcwd(current_dir,FILENAME_MAX);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",current_dir);
+    chdir("storage/emulated/0/Movies/"); //Need to be changed to more general @TODO
+    getcwd(current_dir,FILENAME_MAX);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",current_dir);
+    pthread_create(&app_thread,NULL,&stream_http,NULL);
 }
 
 //just a method which does some actions in cpp

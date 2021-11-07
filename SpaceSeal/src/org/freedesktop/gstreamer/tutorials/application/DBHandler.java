@@ -49,7 +49,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.insert(VideosTable,null,values);
 
-
         //should be db.close, but it carshes an app
     }
 

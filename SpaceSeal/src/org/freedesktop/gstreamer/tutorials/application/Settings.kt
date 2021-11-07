@@ -18,10 +18,12 @@ class Settings : AppCompatActivity() {
         val IpAddressText= findViewById<EditText>(R.id.addressIP)
         val portText=findViewById<EditText>(R.id.PortText)
         val pathText=findViewById<EditText>(R.id.adrdressPathText)
+        val videoLocationTextDebugInfo=findViewById<TextView>(R.id.videoLocatonText)
 
         pathText.setText(dbHandler.ipAddressPath)
         portText.setText(dbHandler.port)
         IpAddressText.setText(dbHandler.ipAddress)
+        videoLocationTextDebugInfo.setText((dbHandler.recentlyRecordedVideoPath))
 
         saveSettingsButton.setOnClickListener{
             dbHandler.updateSettings(IpAddressText.text.toString(),portText.text.toString(),pathText.text.toString())
