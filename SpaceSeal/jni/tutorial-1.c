@@ -7,6 +7,8 @@
 #include <gstreamer-1.0/gst/codecparsers/gstav1parser.h>
 #include <libavcodec/avcodec.h>
 #include <pthread.h>
+#include <glib.h>
+#include <glibconfig.h>
 
 #if GLIB_SIZEOF_VOID_P == 8
 # define GET_CUSTOM_DATA(env, thiz, fieldID) (CustomData *)(*env)->GetLongField (env, thiz, fieldID)

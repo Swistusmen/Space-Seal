@@ -9,6 +9,7 @@ import android.widget.TextView
 
 class Settings : AppCompatActivity() {
     var dbHandler: DBHandler= DBHandler(this)
+    var transcoder: Transcoder= Transcoder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +20,7 @@ class Settings : AppCompatActivity() {
         val portText=findViewById<EditText>(R.id.PortText)
         val pathText=findViewById<EditText>(R.id.adrdressPathText)
         val videoLocationTextDebugInfo=findViewById<TextView>(R.id.videoLocatonText)
+        val transcodeButton=findViewById<Button>(R.id.TranscodeButton)
 
         pathText.setText(dbHandler.ipAddressPath)
         portText.setText(dbHandler.port)
@@ -27,6 +29,10 @@ class Settings : AppCompatActivity() {
 
         saveSettingsButton.setOnClickListener{
             dbHandler.updateSettings(IpAddressText.text.toString(),portText.text.toString(),pathText.text.toString())
+        }
+
+        transcodeButton.setOnClickListener{
+            transcoder.transcodeVideo(dbHandler.recentlyRecordedVideoPath,"a")
         }
     }
 }
