@@ -30,6 +30,7 @@ static char *IP;
 static char *Port;
 static char *Path;
 static char* pipelineDesc;
+static char* Protocol;
 static GstRTSPServer *server;
 static GMainLoop *loop;
 static GstRTSPMountPoints *mounts;
@@ -67,21 +68,23 @@ media_configure_cb (GstRTSPMediaFactory * factory, GstRTSPMedia * media)
 }
 
 static void * main_function(void * userData){
+    g_printerr("RTSP");
+    __android_log_print (ANDROID_LOG_INFO,"tutorial-1","failed to attach server");
     GMainContext * context;
     context=g_main_context_new();
     g_main_context_push_thread_default(context);
-
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1","failed to attach server");
     server=gst_rtsp_server_new();
-
-    g_object_set (server, "service", "8554", NULL); //good not delete
-
+    g_print("1");
+    g_object_set (server, "service", "8554", NULL);
+    g_print("2");
     mounts=gst_rtsp_server_get_mount_points(server);
     factory=gst_rtsp_media_factory_new();
     gst_rtsp_media_factory_set_launch (factory, pipelineDesc);
     g_signal_connect(factory, "media-configure", (GCallback) media_configure_cb , factory);
-
+    g_print("3");
     gst_rtsp_mount_points_add_factory(mounts,"/test",factory);
-
+    g_print("4");
     g_object_unref(mounts);
 
     if(gst_rtsp_server_attach (server, context)==0)
@@ -120,15 +123,12 @@ static void * enable_embeeded_to_use_Java(JNIEnv* env, jclass klass){
     test= (*env)->GetFieldID(env,klass,"testInteger","Ljava/lang/Integer;");
 }
 
-static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescription, jstring ip, jstring port,jstring path) //initalizes instance of class, to be able to call cfunctions
+static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescription, jstring protocol, jstring port,jstring path) //initalizes instance of class, to be able to call cfunctions
 {
     app= (*env)->NewGlobalRef(env,thiz);
 
     pipelineDesc=(*env)->GetStringUTFChars(env,pipelineDescription,0);
     (*env)->ReleaseStringUTFChars(env,pipelineDescription,pipelineDesc);
-
-    IP=(*env)->GetStringUTFChars(env,ip,0);
-    (*env)->ReleaseStringUTFChars(env,ip,IP);
 
     Port=(*env)->GetStringUTFChars(env,port,0);
     (*env)->ReleaseStringUTFChars(env,port,Port);
@@ -136,16 +136,32 @@ static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescript
     Path=(*env)->GetStringUTFChars(env,path,0);
     (*env)->ReleaseStringUTFChars(env,path,Path);
 
-    //pthread_create(&app_thread,NULL,&main_function,NULL);
+    Protocol=(*env)->GetStringUTFChars(env,protocol,0);
+    (*env)->ReleaseStringUTFChars(env,protocol,Protocol);
+
     char current_dir[FILENAME_MAX];
     getcwd(current_dir,FILENAME_MAX);
     __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
                          "%s",current_dir);
-    chdir("storage/emulated/0/Movies/"); //Need to be changed to more general @TODO
+
     getcwd(current_dir,FILENAME_MAX);
     __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
                          "%s",current_dir);
-    pthread_create(&app_thread,NULL,&stream_http,NULL);
+
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",Protocol);
+    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1",
+                         "%s",pipelineDesc);
+    char* compar="RTSP";
+
+    if(*Protocol==*compar) {
+        pthread_create(&app_thread, NULL, &main_function, NULL);
+    }
+    else {
+        chdir("storage/emulated/0/Movies/"); //Need to be changed to more general @TODO
+        pthread_create(&app_thread, NULL, &stream_http, NULL);
+    }
+
 }
 
 //just a method which does some actions in cpp

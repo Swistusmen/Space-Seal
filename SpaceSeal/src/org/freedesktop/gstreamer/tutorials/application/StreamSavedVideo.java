@@ -40,6 +40,7 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
     private Integer testInteger=999;
     private long native_custom_data;
     private long nativeStreammingObject;
+    private String prot;
     TextView fileToStream=null;
     String fileToStreamString="";
     StreammingProtocol protocol=StreammingProtocol.HLS;
@@ -66,6 +67,7 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
         choseFile.setOnClickListener(picker);
         hls.setOnClickListener(new HLSChosen());
         rtsp.setOnClickListener(new RTSPChosen());
+        prot="HLS";
 
         initDataFromDatabase();
 
@@ -100,10 +102,9 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        String prot="HLS";
         if (protocol==StreammingProtocol.RTSP)
             prot="RTSP";
-        nativeInit(PipelineBuilder.buildPipeline(fileToStreamString),ipAddress,port,path);
+        nativeInit(PipelineBuilder.buildPipeline(fileToStreamString,protocol),prot,port,path);
     }
 
     private class FilePicker implements View.OnClickListener {
