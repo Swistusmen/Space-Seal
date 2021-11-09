@@ -52,9 +52,9 @@ public class Transcoder {
 
     private String getNewFileName(String filename){
         Log.i(Config.TAG, filename);
-        String []parts=filename.split(".");
-        //String newVideoName=parts[0]+".mkv";
-        String newVideoName="/storage/emulated/0/Movies/myTest.mkv";
+        String []parts=filename.split("[.]");
+        Log.i(Config.TAG, String.valueOf(parts.length));
+        String newVideoName=parts[0]+".mkv";
         Log.i(Config.TAG, newVideoName);
         return newVideoName;
     }

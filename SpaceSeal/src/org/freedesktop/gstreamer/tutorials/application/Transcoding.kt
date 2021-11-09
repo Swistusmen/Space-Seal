@@ -63,5 +63,6 @@ class Transcoding : AppCompatActivity() {
         c!!.moveToFirst()
         fileToTranscode=c!!.getString(c!!.getColumnIndex(OpenableColumns.DISPLAY_NAME))
         choosenVideo.text=fileToTranscode
+        fileToTranscode=dbHandler.videoPath+"/"+fileToTranscode
     }
 }
