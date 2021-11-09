@@ -7,6 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 
+
+//1.Streamming format- hls/rtsp
+//2.Ip option
+//3.Adding new activity for streamming video
+
+
 class Settings : AppCompatActivity() {
     var dbHandler: DBHandler= DBHandler(this)
     var transcoder: Transcoder= Transcoder()
@@ -32,7 +38,7 @@ class Settings : AppCompatActivity() {
         }
 
         transcodeButton.setOnClickListener{
-            transcoder.transcodeVideo(dbHandler.recentlyRecordedVideoPath,"a")
+            transcoder.transcodeVideo(dbHandler.recentlyRecordedVideoPath,VideoCodecs.AV1)
         }
     }
 }

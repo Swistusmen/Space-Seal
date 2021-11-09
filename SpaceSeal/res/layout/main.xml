@@ -17,9 +17,19 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Stream"
+            android:text="Record"
             android:background="@color/greenAccept"
-            android:id="@+id/StreamButton"
+            android:id="@+id/RecordButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transcoding"
+            android:background="@color/greenAccept"
+            android:id="@+id/RequestTranscoding"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -54,6 +64,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"/>
+
     </LinearLayout>
 
 </LinearLayout>

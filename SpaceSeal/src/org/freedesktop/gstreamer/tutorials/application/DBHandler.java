@@ -141,5 +141,21 @@ public class DBHandler extends SQLiteOpenHelper {
         return desc;
     }
 
+    public String getVideoName(){
+        String videoName=getRecentlyRecordedVideoPath();
+        String[] result=videoName.split("/");
+        return result[result.length-1];
+    }
+
+    public String getVideoPath(){
+        String videoName=getRecentlyRecordedVideoPath();
+        String[] result=videoName.split("/");
+        String path="";
+        int size= result.length-1;
+        for(int i=0;i<size;i++){
+            path+=result[i]+"/";
+        }
+        return path;
+    }
 
 }

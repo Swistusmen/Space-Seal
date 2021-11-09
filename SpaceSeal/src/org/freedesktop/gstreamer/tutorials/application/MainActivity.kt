@@ -15,9 +15,16 @@ class MainActivity : Activity() {
         setContentView(R.layout.main)
 
         val settingsButton=findViewById<Button>(R.id.SettingsButton)
-        val streamButton=findViewById<Button>(R.id.StreamButton)
+        val recordButton=findViewById<Button>(R.id.RecordButton)
         val aboutButton=findViewById<Button>(R.id.AboutButton)
         val requestButton=findViewById<Button>(R.id.HTTPButton)
+        val requestTranscoding=findViewById<Button>(R.id.RequestTranscoding)
+
+        requestTranscoding.setOnClickListener{
+            val settingsActivity=Intent(this, Transcoding::class.java)
+            println(settingsActivity.action.toString())
+            startActivity(settingsActivity)
+        }
 
         settingsButton.setOnClickListener{
             val settingsActivity=Intent(this, Settings::class.java)
@@ -25,7 +32,7 @@ class MainActivity : Activity() {
             startActivity(settingsActivity)
         }
 
-        streamButton.setOnClickListener{
+        recordButton.setOnClickListener{
             val streammingActivity=Intent(this, Streamming::class.java)
             startActivity(streammingActivity)
         }
