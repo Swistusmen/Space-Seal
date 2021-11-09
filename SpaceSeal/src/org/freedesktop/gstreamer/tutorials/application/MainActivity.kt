@@ -38,7 +38,7 @@ class MainActivity : Activity() {
         }
 
         aboutButton.setOnClickListener{
-            val aboutActivity= Intent(this, About::class.java)
+            val aboutActivity= Intent(this, StreamSavedVideo::class.java)
             startActivity(aboutActivity)
         }
 

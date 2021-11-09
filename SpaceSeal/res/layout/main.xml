@@ -37,9 +37,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="Stream Saved Video"
             android:background="@color/greenAccept"
-            android:id="@+id/SettingsButton"
+            android:id="@+id/AboutButton"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -47,9 +47,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About"
+            android:text="Settings"
             android:background="@color/greenAccept"
-            android:id="@+id/AboutButton"
+            android:id="@+id/SettingsButton"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

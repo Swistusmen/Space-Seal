@@ -39,9 +39,6 @@ static GError* error;
 static GstBus* bus;
 static GstElement* pipeline;
 
-//TODO: Install gstreamer with av1enc
-//TODO:
-
 static void
 media_prepared_cb (GstRTSPMedia * media)
 {
@@ -196,7 +193,7 @@ JNI_OnLoad (JavaVM * vm, void *reserved)
   }
   //loading ui-> this is specific for the tutorial from gstreamer
   jclass klass = (*env)->FindClass (env,
-      "org/freedesktop/gstreamer/tutorials/application/About");
+      "org/freedesktop/gstreamer/tutorials/application/StreamSavedVideo");
   //registering methods within
   (*env)->RegisterNatives (env, klass, native_methods,
       G_N_ELEMENTS (native_methods));

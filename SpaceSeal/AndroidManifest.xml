@@ -30,7 +30,7 @@
             android:name=".Request"
             android:exported="true" />
         <activity
-            android:name=".About"
+            android:name=".StreamSavedVideo"
             android:exported="true" />
         <activity android:name=".Settings" />
         <activity
