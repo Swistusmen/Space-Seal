@@ -68,12 +68,10 @@ media_configure_cb (GstRTSPMediaFactory * factory, GstRTSPMedia * media)
 }
 
 static void * main_function(void * userData){
-    g_printerr("RTSP");
-    __android_log_print (ANDROID_LOG_INFO,"tutorial-1","failed to attach server");
+    g_print("RTSP");
     GMainContext * context;
     context=g_main_context_new();
     g_main_context_push_thread_default(context);
-    __android_log_print (ANDROID_LOG_ERROR, "tutorial-1","failed to attach server");
     server=gst_rtsp_server_new();
     g_print("1");
     g_object_set (server, "service", "8554", NULL);

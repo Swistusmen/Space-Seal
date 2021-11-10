@@ -44,6 +44,8 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
     TextView fileToStream=null;
     String fileToStreamString="";
     StreammingProtocol protocol=StreammingProtocol.HLS;
+    VideoCodecs streammingCodec=VideoCodecs.H264;
+
 
     // Called when the activity is first created.
     @Override
@@ -61,12 +63,16 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
         RadioButton hls=(RadioButton)findViewById(R.id.HLSStream);
         RadioButton rtsp=(RadioButton)findViewById(R.id.RTSPStream);
         fileToStream=(TextView)findViewById(R.id.fileToStream);
+        RadioButton h264=(RadioButton)findViewById(R.id.H264ToStream);
+        RadioButton av1=(RadioButton)findViewById(R.id.AV1ToStream);
 
         stream.setOnClickListener(this);
         FilePicker picker=new FilePicker();
         choseFile.setOnClickListener(picker);
         hls.setOnClickListener(new HLSChosen());
         rtsp.setOnClickListener(new RTSPChosen());
+        h264.setOnClickListener(new H264Action());
+        av1.setOnClickListener(new AV1Action());
         prot="HLS";
 
         initDataFromDatabase();
@@ -79,12 +85,10 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        //nativeInit(PipelineBuilder.buildPipeline(dbHandler.getRecentlyRecordedVideoPath()),ipAddress,port,path);
-
         TextView aboutText=(TextView) findViewById(R.id.AboutText);
         fileToStreamString=dbHandler.getRecentlyRecordedVideoPath();
         fileToStream.setText(fileToStreamString);
-        aboutText.setText("Welcome to " + nativeRandom(ipAddress,port,path)+" "+testInteger+" !");//nativeGetGStreamerInfo() + " !");
+        aboutText.setText("Welcome to " + nativeRandom(ipAddress,port,path)+" "+testInteger+" !");
     }
 
     static {
@@ -104,7 +108,7 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (protocol==StreammingProtocol.RTSP)
             prot="RTSP";
-        nativeInit(PipelineBuilder.buildPipeline(fileToStreamString,protocol),prot,port,path);
+        nativeInit(PipelineBuilder.buildPipeline(fileToStreamString,protocol,streammingCodec),prot,port,path);
     }
 
     private class FilePicker implements View.OnClickListener {
@@ -141,6 +145,20 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
 
         Log.i(Config.TAG,fileToStreamString);
         fileToStream.setText(fileToStreamString);
+    }
+
+    private class H264Action implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            streammingCodec=VideoCodecs.H264;
+        }
+    }
+
+    private class AV1Action implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            streammingCodec=VideoCodecs.AV1;
+        }
     }
 }
 
