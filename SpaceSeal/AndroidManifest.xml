@@ -24,6 +24,9 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
+            android:name=".Sensor"
+            android:exported="true" />
+        <activity
             android:name=".Transcoding"
             android:exported="true" />
         <activity

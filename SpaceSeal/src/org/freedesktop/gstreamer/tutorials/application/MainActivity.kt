@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 
 
+
 class MainActivity : Activity() {
     //private external fun nativeGetGStreamerInfo(): String
 
@@ -19,6 +20,7 @@ class MainActivity : Activity() {
         val aboutButton=findViewById<Button>(R.id.AboutButton)
         val requestButton=findViewById<Button>(R.id.HTTPButton)
         val requestTranscoding=findViewById<Button>(R.id.RequestTranscoding)
+        val sensorData=findViewById<Button>(R.id.SensorData)
 
         requestTranscoding.setOnClickListener{
             val settingsActivity=Intent(this, Transcoding::class.java)
@@ -47,22 +49,11 @@ class MainActivity : Activity() {
             startActivity(httpActivity)
         }
 
-
-        /*
-        try {
-            GStreamer.init(this)
-        } catch (e: Exception) {
-            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-            finish()
-            return
+        sensorData.setOnClickListener{
+            val sensorActivity= Intent(this, Sensor::class.java)
+            startActivity(sensorActivity)
         }
-        */
 
-        //setContentView(R.layout.main)
-        //val tv = findViewById<View>(R.id.textview_info) as TextView
-        /*
-        tv.text = "Welcome to " + nativeGetGStreamerInfo() + " !"
-        */
 
     }
 

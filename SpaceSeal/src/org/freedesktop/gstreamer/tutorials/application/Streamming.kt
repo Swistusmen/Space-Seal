@@ -1,12 +1,14 @@
 package org.freedesktop.gstreamer.tutorials.application
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.hardware.Camera
+import android.hardware.*
 import android.hardware.Camera.CameraInfo
+import android.hardware.Sensor
 import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.net.Uri
@@ -14,6 +16,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
@@ -27,28 +30,9 @@ import java.nio.file.Files.exists
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
+import android.widget.Switch
 
-
-
-
-
-//in the future this should be migrated into camera2
-
-//TODO
-/*
-0. Refactor the code
-1.Make camera scan video at the portrait layout DONE
-2.Button update- set color, etc DONE
-3.Add new button- it will scan and send a video using gstreamer DONE
-4.Make an RTSP Server work -3
-5.Improve concents
-6.Improve video quality
-7.Add storing lasttly recordered vieo within DB DONE
-8.Investigate how to stream already recordered video to the server -2
-*/
-
-
-class Streamming() : AppCompatActivity() {
+class Streamming() : AppCompatActivity(), SensorEventListener {
     private var mCamera: Camera? = null
     private var mPreview: CameraPreviewer? = null
     private var mediaRecorder: MediaRecorder?= null
@@ -56,6 +40,17 @@ class Streamming() : AppCompatActivity() {
     private var isReadyToStream=false
     private var saveLocation: String=""
     private var dbHandler: DBHandler= DBHandler(this)
+    private var recordOrientation:Boolean=false
+    /*stuffs for sensors*/
+    private lateinit var sensorManager: SensorManager
+    private val accelerometerReading = FloatArray(3)
+    private val magnetometerReading = FloatArray(3)
+
+    private val rotationMatrix = FloatArray(9)
+    private val orientationAngles = FloatArray(3)
+
+    var handler: Handler = Handler()
+    /*ends here*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +73,8 @@ class Streamming() : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1 );
 
         var recordButton=findViewById<Button>(R.id.RecordButton)
-        var streamButton=findViewById<Button>(R.id.StartStreammingButton)
+        var orientationSwitcher=findViewById<Switch>(R.id.OrientationRecordingSwitcher)
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         mCamera = getCameraInstance()
         mCamera?.setDisplayOrientation(90)
@@ -90,17 +86,31 @@ class Streamming() : AppCompatActivity() {
             preview.addView(it)
         }
 
+        orientationSwitcher.setOnClickListener{
+            recordOrientation=orientationSwitcher.isChecked()
+        }
+
+        var myFun= object : Runnable {
+            override fun run() {
+                updateOrientationAngles()
+                handler.postDelayed(this,1000)
+            }
+        }
+
         recordButton.setOnClickListener{
             if (isRecording) {
                 // stop recording and release camera
                 mediaRecorder?.stop() // stop the recording
+                if(recordOrientation){
+                    handler.removeCallbacks(myFun)
+                }
                 releaseMediaRecorder() // release the MediaRecorder object
                 mCamera?.lock() // take camera access back from MediaRecorder
                 dbHandler.updateVideo(saveLocation)
                 // inform the user that recording has stopped
                 recordButton.setText("Record")
                 recordButton.setBackgroundColor(Color.parseColor("#66DE93"))
-                streamButton.setBackgroundColor(Color.parseColor("#66DE93"))
+
                 isReadyToStream=true
                 isRecording = false
             } else {
@@ -109,29 +119,48 @@ class Streamming() : AppCompatActivity() {
                     // Camera is available and unlocked, MediaRecorder is prepared,
                     // now you can start recording
                     mediaRecorder?.start()
+                    if(recordOrientation){
+                        handler.post(myFun)
+                    }
                     // inform the user that recording has started
                     recordButton.setText("Stop recording")
                     recordButton.setBackgroundColor(Color.parseColor("#FF616D"))
                     isRecording = true
                 } else {
-                    // prepare didn't work, release the camera
                     releaseMediaRecorder()
-                    // inform user
                 }
             }
         }
 
-        streamButton.setOnClickListener{
-            if(isReadyToStream){
-                //TODO implement some actions here
-            }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+            sensorManager.registerListener(
+                this,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        }
+        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
+            sensorManager.registerListener(
+                this,
+                magneticField,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
         }
     }
+
 
     override fun onPause() {
         super.onPause()
         releaseMediaRecorder() // if you are using MediaRecorder, release it first
         releaseCamera() // release the camera immediately on pause event
+        sensorManager.unregisterListener(this)
     }
 
     private fun releaseMediaRecorder() {
@@ -251,5 +280,30 @@ class Streamming() : AppCompatActivity() {
 
         }
         return false
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if(event!=null)
+            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
+            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
+                System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
+            }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.d(ContentValues.TAG,"Nothing")
+    }
+
+    fun updateOrientationAngles() {
+        // Update rotation matrix, which is needed to update orientation angles.
+        SensorManager.getRotationMatrix(
+            rotationMatrix,
+            null,
+            accelerometerReading,
+            magnetometerReading
+        )
+        val back=SensorManager.getOrientation(rotationMatrix, orientationAngles)
+        Log.d(ContentValues.TAG, "Back: ${back[0]} ${back[1]} ${back[2]}")
     }
 }

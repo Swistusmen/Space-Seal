@@ -13,7 +13,7 @@ public class PipelineBuilder {
         if(StreammingProtocol.RTSP==protocol) {
             if(VideoCodecs.H264==codec){
             String RTSPStreamDescription = " filesrc location=" + location + "  ! qtdemux name=d d." +
-                    " ! queue " + "! rtph264pay name=pay0 d."
+                    " ! queue " + " rtph264pay name=pay0 d."
                     + " !queue ! aacparse " + "  ! decodebin " + "  ! audioconvert " + "  ! avenc_aac " + "  ! rtpmp4apay name=pay0";
             return RTSPStreamDescription;
             }else if(codec==VideoCodecs.AV1){
@@ -28,6 +28,7 @@ public class PipelineBuilder {
             //if(codec==VideoCodecs.AV1){
             String streamMKVAV1 = " filesrc location=" + location + " !  hlssink playlist-root=http://127.0.0.1:8080 target-duration=5 max-files=100";
             return streamMKVAV1;
+
 
         }
         return "";

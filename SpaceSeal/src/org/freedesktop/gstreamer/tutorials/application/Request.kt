@@ -1,6 +1,9 @@
 package org.freedesktop.gstreamer.tutorials.application
 
 import SyncResponse
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -50,5 +53,6 @@ class Request : AppCompatActivity() {
             })
             enterText.setText(" ")
         }
+
     }
 }
