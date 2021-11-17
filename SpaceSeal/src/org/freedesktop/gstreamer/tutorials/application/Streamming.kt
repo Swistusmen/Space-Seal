@@ -39,6 +39,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
     private var isRecording=false
     private var isReadyToStream=false
     private var saveLocation: String=""
+    private var coordinatesFileLocation: String=""
     private var dbHandler: DBHandler= DBHandler(this)
     private var recordOrientation:Boolean=false
     /*stuffs for sensors*/
@@ -51,6 +52,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
 
     var handler: Handler = Handler()
     /*ends here*/
+    var coordinates=ArrayList<Array<Float>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +113,8 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
                 recordButton.setText("Record")
                 recordButton.setBackgroundColor(Color.parseColor("#66DE93"))
 
+                saveCoordinates()
+
                 isReadyToStream=true
                 isRecording = false
             } else {
@@ -133,6 +137,19 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
         }
 
 
+    }
+
+    private fun saveCoordinates() {
+        var destination=File(coordinatesFileLocation)
+        var noCoordinates=coordinates.size-1
+        var text:String=""
+
+        for(i in 0..noCoordinates){
+            var tab=coordinates[i]
+            text+=tab[0].toString()+" "+tab[1]+" "+tab[2]+"\n"
+        }
+        destination.writeText(text)
+        coordinates.clear()
     }
 
     override fun onResume() {
@@ -181,7 +198,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
         var dir: File=File(path)
         if(!dir.exists())
             dir.mkdirs()
-        var fileToSave=path+timeStamp+".mp4"
+        var fileToSave=path+timeStamp
         return fileToSave
     }
 
@@ -256,6 +273,8 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
                 setVideoEncoder(MediaRecorder.VideoEncoder.H264)
 
                 saveLocation=getFileToSaveVideo()
+                coordinatesFileLocation=saveLocation+".txt"
+                saveLocation+=".mp4"
                 setOutputFile(saveLocation)
 
                 // Step 5: Set the preview output
@@ -305,5 +324,6 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
         )
         val back=SensorManager.getOrientation(rotationMatrix, orientationAngles)
         Log.d(ContentValues.TAG, "Back: ${back[0]} ${back[1]} ${back[2]}")
+        coordinates.add(arrayOf(back[0],back[1],back[2]))
     }
 }

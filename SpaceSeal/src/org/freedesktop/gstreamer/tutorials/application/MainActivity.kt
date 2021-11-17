@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 
 
-
 class MainActivity : Activity() {
     //private external fun nativeGetGStreamerInfo(): String
 
