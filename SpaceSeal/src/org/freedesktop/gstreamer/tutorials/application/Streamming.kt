@@ -53,6 +53,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
     var handler: Handler = Handler()
     /*ends here*/
     var coordinates=ArrayList<Array<Float>>()
+    var numberOfCoordinationSavesPerSecond=30
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +96,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
         var myFun= object : Runnable {
             override fun run() {
                 updateOrientationAngles()
-                handler.postDelayed(this,1000)
+                handler.postDelayed(this,((1000/numberOfCoordinationSavesPerSecond).toLong()))
             }
         }
 
@@ -135,14 +136,12 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
                 }
             }
         }
-
-
     }
 
     private fun saveCoordinates() {
         var destination=File(coordinatesFileLocation)
         var noCoordinates=coordinates.size-1
-        var text:String=""
+        var text:String=numberOfCoordinationSavesPerSecond.toString()+"\n"
 
         for(i in 0..noCoordinates){
             var tab=coordinates[i]
@@ -271,6 +270,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+                setVideoFrameRate(numberOfCoordinationSavesPerSecond)
 
                 saveLocation=getFileToSaveVideo()
                 coordinatesFileLocation=saveLocation+".txt"
