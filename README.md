@@ -2,6 +2,8 @@
 
 <h2> About </h2>
   Application created as a part of my engineering project. It let's user to record not only a video, but also space orientation for every frame, transcode selected video into .mkv and even AV1 (both not supported by android framework). Nextly video may be streammed using HLS or RTSP protocol
+  
+  <br>Second part of engineer work (desktop server): https://github.com/Swistusmen/gCosm</br>
 <h2> Tech Stack </h2>
   <br> Java, Kotlin </br>
   C
