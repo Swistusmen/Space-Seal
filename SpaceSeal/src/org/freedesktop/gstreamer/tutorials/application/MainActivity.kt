@@ -14,19 +14,12 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
-        val settingsButton=findViewById<Button>(R.id.SettingsButton)
         val recordButton=findViewById<Button>(R.id.RecordButton)
         val aboutButton=findViewById<Button>(R.id.AboutButton)
         val requestTranscoding=findViewById<Button>(R.id.RequestTranscoding)
 
         requestTranscoding.setOnClickListener{
             val settingsActivity=Intent(this, Transcoding::class.java)
-            println(settingsActivity.action.toString())
-            startActivity(settingsActivity)
-        }
-
-        settingsButton.setOnClickListener{
-            val settingsActivity=Intent(this, Settings::class.java)
             println(settingsActivity.action.toString())
             startActivity(settingsActivity)
         }
