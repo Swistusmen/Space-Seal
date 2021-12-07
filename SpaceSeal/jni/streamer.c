@@ -156,7 +156,7 @@ static void * gst_native_init(JNIEnv* env, jobject thiz,jstring pipelineDescript
         pthread_create(&app_thread, NULL, &main_function, NULL);
     }
     else {
-        chdir("storage/emulated/0/Movies/"); //Need to be changed to more general @TODO
+        chdir("storage/emulated/0/Movies/");
         pthread_create(&app_thread, NULL, &stream_http, NULL);
     }
 
