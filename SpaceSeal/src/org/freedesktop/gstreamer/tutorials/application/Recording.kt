@@ -9,15 +9,12 @@ import android.graphics.Color
 import android.hardware.*
 import android.hardware.Camera.CameraInfo
 import android.hardware.Sensor
-import android.media.CamcorderProfile
 import android.media.MediaRecorder
-import android.net.Uri
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
 import android.widget.Button
@@ -26,13 +23,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files.exists
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Switch
 
-class Streamming() : AppCompatActivity(), SensorEventListener {
+class Recording() : AppCompatActivity(), SensorEventListener {
     private var mCamera: Camera? = null
     private var mPreview: CameraPreviewer? = null
     private var mediaRecorder: MediaRecorder?= null
@@ -57,7 +53,7 @@ class Streamming() : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_streamming)
+        setContentView(R.layout.activity_recording)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED)

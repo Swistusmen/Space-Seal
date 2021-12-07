@@ -29,9 +29,8 @@
         <activity
             android:name=".StreamSavedVideo"
             android:exported="true" />
-        <activity android:name=".Settings" />
         <activity
-            android:name=".Streamming"
+            android:name=".Recording"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

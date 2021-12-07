@@ -25,7 +25,7 @@ class MainActivity : Activity() {
         }
 
         recordButton.setOnClickListener{
-            val streammingActivity=Intent(this, Streamming::class.java)
+            val streammingActivity=Intent(this, Recording::class.java)
             startActivity(streammingActivity)
         }
 

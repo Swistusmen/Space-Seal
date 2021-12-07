@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,9 +23,6 @@ import android.widget.Toast;
 import com.arthenica.mobileffmpeg.Config;
 
 import org.freedesktop.gstreamer.GStreamer;
-
-import java.io.File;
-import java.lang.reflect.Array;
 
 public class StreamSavedVideo extends AppCompatActivity implements View.OnClickListener {
     private native String nativeGetGStreamerInfo();
@@ -52,7 +48,7 @@ public class StreamSavedVideo extends AppCompatActivity implements View.OnClickL
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_streaming);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_DENIED)
